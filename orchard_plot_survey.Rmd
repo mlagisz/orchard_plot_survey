@@ -1,0 +1,390 @@
+---
+title: "The Ecology and Evolution of Forest Plots and their Domestication: Introducing Orchard Plots"
+author: "Shinichi Nakagawa, Malgorzata Lagisz, Rose O'Dea, Alistair Senior, Daniel Noble, Joanna Rutkowska"
+date: "`r format(Sys.time(), '%d %B %Y')`"
+output:
+  html_document:
+    code_download: true
+    code_folding: hide
+    depth: 4
+    number_sections: no
+    theme:  cosmo # “default”, “cerulean”, “journal”, “flatly”, “darkly”, “readable”, “spacelab”, “united”, “cosmo”, “lumen”, “paper”, “sandstone”, “simplex”, “yeti”
+    toc: yes
+    toc_float: yes
+    toc_depth: 4
+  pdf_document:
+    toc: yes
+subtitle: Electronic Supplementary Material - literature survey
+#bibliography: references.bib
+#biblio-style: "apalike"
+#csl: nature.csl
+link-citations: yes
+---
+
+```{r setup, eval = TRUE}
+#kniter seetting
+knitr::opts_chunk$set(
+message = FALSE,
+warning = FALSE, # no warnings
+cache = TRUE,# Cacheing to save time when kniting
+tidy = TRUE, 
+echo = TRUE
+#fig.width = 9
+)
+
+# clearning up
+rm(list=ls())
+```
+
+## Setups
+
+### Loading packages and custom functions
+
+```{r load packages, eval = TRUE}
+# loading packages
+# devtools::install_github("thomasp85/patchwork")
+pacman::p_load(tidyverse, # tidy family and related pacakges below
+               readxl, #read Excel files
+               kableExtra, 
+               gridExtra, # may not use this
+               purrr,
+               magrittr, # extending piping
+               pander,   # nice tables
+               #ggbeeswarm, # making bee-swarm plots possible
+               plotly,     # interactive plots using ggplot2
+               png,         # reading png files
+               grid,        # graphic layout manipulation
+               #patchwork    # putting ggplots together - you need to install via devtool
+               formatR,
+               nVennR, # Venn diagrams https://cran.r-project.org/web/packages/nVennR/vignettes/nVennR.html
+               rsvg, #displaying svg plots from nVennR
+               grImport2 #displaying svg plots from nVennR
+)
+```
+
+
+## Supplementary Methods and Results  
+
+### Supplementary information for the literature search    
+
+#### Literature search - methods   
+
+The aim of the literature survay was to examine how forest plots are used in ecology and evolution, and what features they have. To achieve this, we conductied a literature survey on graphical presentation of meta-analytic data and results in ecology and evolution. We collected examples of “forest plots” from 102 published meta-analyses that were used in our upcoming PRISMA-ecoevo paper (CITATION?). Consult this paper for details on how this set of representative 102 meta-analyses was created (or do we need to describe this here briefly?).   
+
+From the full texts and SI of 102 meta-analytic papers, we took screenshots of any figures that look like a forest plot. The screenshots included figure captions, which usually provided information needed to tell what is presented in the plots (e.g., if there are any prediction intervals resented). This resulted in 295 .png files with the figure screenshots. The files were named with the fulltext_ID (as in the list of collected 102 meta-analytic papers), followed by an underscore and the figure number (e.g., ft001_fig1.png or ft001_figS1.png, for the main text or supplementary info, respectively). The files are stored in a folder FOREST_PLOTS on OSF (https://osf.io/q5e4g/files/).   
+
+We designed a data extraction form to collect information on the features of the collected forest plots (Google Form screenshot available in Supplementary File 1.png). Briefly, we assessed only panels that have forest plot-like style graphs (ignore funnel plots, histograms, etc.). We based our your classification on the information present in the plot itself and plot caption (except if CI are shown with point estimates, we assumed the latter to be the mean). For the data aggregation level we coded whether individual (non-aggregated) effect sizes were presented, or they were aggregated at the study, taxon or other levels. Plot graphical style was coded as dot (a shape, usually circles, squares or diamonds, used to represent point estimate, with whiskers representing interval estimate, as in the “classical” forest plot), box (vertical or horizontal line representing point estimate, box edges represent dispersion), bar (edge of a horizontal or vertical bar  representing point estimate; but excluded histograms of distributions of individual values), mixed (combination of any of the above, e.g. “classical” forest plot with individual data points alongside, as in the proposed orchard plot).    
+
+We also coded point estimates type (individual effect size for non-aggregated data / mean – mean value of aggregated effect sizes / median – median value of aggregated effect sizes / mixed – combination of any of the above, e.g. both aggregated and individual data points presented alongside, as in the proposed orchard plot)
+other/uncertain – cannot be easily classified as any of the above (discuss or exclude later), interval estimates type (CI – confidence interval or credible intervals / PI – prediction intervals (note that prediction intervals are also known as “credibility intervals”) / SD or SE – standard deviations or standard errors / mixed – combination of any of the above, e.g., both CI and PI are presented) and whether point/shape was of variable size due to scaling (unscaled – all points/dots/shapes are same size / scaled – points/dots/shapes have variable sizes to represent some additional point property, e.g., sample size / mixed – combination of any of the above, e.g., both unscaled and scaled points/dots/shapes are presented).   
+
+Two researchers (ML, JR) look at the extracted figures and classify their properties. We discussed and resolved any disagreements in the coded data. We processed the coded date to create a paper level matrx that would allow us to answer the following questions [and our predictions]:   
+
+1.	How many papers (proportion) present some form of forest plots? (at this stage we cannot tell which of these are “classical” forest plots, so see the more detailed questions below based on more detailed coding). [We expect that it is commonly used].   
+
+2.	How many papers (proportion) present prediction interval in forest plots? (basing on the coding). [We do not expect many; we expect mean with CI to be commonly used to present point estimates and interval estimates].     
+ 
+3.	What is most/least prevalent graphical style of forest plot used?. Here we looked at the main graphical plot styles: dot/box/bar and whether point estimates size is scaled [We expect “dot” to be most popular, as this is the “classical” forest plot style; dot scaling likely underutilised].  
+
+4.	What are the frequences of presenting of aggregated data in the forest plot at the study, taxon, or other levels? How often non-aggregated data is presented? [We expect few occurrences of “classical” forest plots (aggregated at study level); there should be studies with taxon-level aggregation, but "other aggregated" could dominate].   
+
+
+**Extended Data Table 1 [TODO IF NEEDED]:**   
+Citations for 102 representative meta-analytic papers publushed in ecology and/or evolution journals.    
+*Columns to use: paper ID + full citation*   
+
+```{r list of papers, include = FALSE, eval = FALSE}
+# getting the data and formating some variables (turning chraracter vectors to factors)
+# read_csv("../data/lit_search.csv", na = "NA") %>% 
+#    mutate_if(is.character, as.factor) %>%  kable("html") %>%
+#    kable_styling("striped", position = "left")
+```
+
+
+## The Survey Dataset
+
+### Dataset summary
+
+From the list of the files ID's in the dataset we can tell how many papers presented some kind of forest plot, and whether these plots were in the main paper, supplements, or both.
+
+**Extended Data Table 2:** 
+The simplified dataset from the literature survey of 102 meta-analytic papers in ecology or evolution.
+
+```{r load coded data, eval = TRUE}
+# getting the data and formating some variables (turning chraracter vectors to factors)
+full_data <- read_excel("./data/Data collection for the _orchard plot_ manuscript (Responses)_cleaning2_ML.xlsx", na = "NA") %>% 
+   mutate_if(is.character, as.factor)
+#str(full_data) #each row represents one scoring attempt, so it is usually 2 rows per figure file (since 2 people were assessing independently)
+```
+
+```{r clean coded data, include = FALSE, eval = TRUE}
+#remove all rows with censor==1, so that only one final score is left for each figure file
+dat <- full_data  %>% filter(censor == 0)
+dat <- droplevels(dat) #adjust factor levels
+
+#remove unnecessary columns and rename the other
+dat <- dat  %>% select(-ends_with("same"), -censor, -Timestamp, -"1. Assessor's name")
+dat <- dat  %>% rename(fileID = "2. Forest plot file name", 
+                       panel = "3. Panel",
+                       panel_comm = "Comment - panel:",
+                       aggr = "4. Data aggregation level",
+                       aggr_comm = "Comment - Data aggregation level:",
+                       style = "5. Plot graphical style",
+                       style_comm = "Comment - Plot graphical style:",
+                       point = "6. Point estimates",
+                       point_comm = "Comment - Point estimates:",
+                       interv = "7. Interval estimates",
+                       interv_comm = "Comment - Interval estimates:",
+                       scaling = "8. Point/shape scaling",
+                       scaling_comm = "Comment - Point scaling:",
+                       comm = "9. Comment - overall:"
+                       )
+
+#recode factor levels into shorter text
+levels(dat$aggr)
+#dat$aggr_long <- dat$aggr
+levels(dat$aggr) <- c("individual", "mixed", "other_aggr", "study", "taxon")
+levels(dat$style)
+#dat$style_long <- dat$style
+levels(dat$style) <- c("bar", "box", "dot", "mixed", "other")
+levels(dat$point)
+#dat$point_long <- dat$point
+levels(dat$point) <- c("indivES", "meanES", "medianES", "mixed", "other")
+levels(dat$interv)
+#dat$interv_long <- dat$interv
+levels(dat$interv) <- c("CI", "other", "PI", "SDorSE")
+levels(dat$scaling)
+#dat$scaling_long <- dat$scaling
+levels(dat$scaling) <- c("mixed", "scaled", "notscaled")
+
+#extract paperID
+length(unique(dat$fileID))
+dat$paperID <- substr(dat$fileID, 1,5)
+length(unique(dat$paperID)) #84
+
+#re-arrange columns
+dat %>%
+  select(paperID, everything()) -> dat
+
+all <- unique(dat$paperID) #IDs of all papers
+
+# making a scrollable table
+kable(dat, "html") %>%
+  kable_styling("striped", position = "left") %>%
+  scroll_box(width = "100%", height = "500px")
+```
+
+
+
+## Forest plot usage and features in ecology and evolution - Results   
+
+### 1. How many papers (proportion) present some form of forest plots?       
+**Answer 1.**	   
+Forest plot are commonly used in ecology and evolution meta analytic papers - `r length(unique(dat$paperID))` papers (`r round(length(unique(dat$paperID))/102*100, 2)` %) of our data set had at least one forest plot-like figure.    
+
+
+
+### 2.	How many papers (and proportion or papers with forest plots) present prediction interval in forest plots?  
+
+```{r summarise PI use, eval = TRUE}
+dat2 <- dat
+#table(dat2$interv)
+#table(dat2$interv_comm)
+
+#group the dataset by paperID and create sets of papers that use CI
+papers_CI_pure <- dat2 %>% 
+  filter(grepl("CI", interv)) %>%
+  group_by(paperID) %>%
+  summarise(CI1 = unique(paperID)) #71 papers
+papers_CI_mix <- dat2 %>% 
+  filter(grepl("CI", interv_comm)) %>%
+  group_by(paperID) %>%
+  summarise(CI2 = unique(paperID)) #1 paper
+papers_CI <- (union(papers_CI_pure$CI1, papers_CI_mix$CI2)) #72 papers with either pure or/and mix CI in the forest plots
+
+#group the dataset by paperID and create sets of papers that use PI
+papers_PI_pure <- dat2 %>% 
+  filter(grepl("PI", interv)) %>%
+  group_by(paperID) %>%
+  summarise(PI1 = unique(paperID)) #1 paper
+papers_PI_mix <- dat2 %>% 
+  filter(grepl("PI", interv_comm)) %>%
+  group_by(paperID) %>%
+  summarise(PI2 = unique(paperID)) #0 papers
+papers_PI <- (union(papers_PI_pure$PI1, papers_PI_mix$PI2)) #1 paper with either pure or/and mix PI in the forest plots
+
+#group the dataset by paperID and create sets of papers that use SDorSE
+papers_SDorSE_pure <- dat2 %>% 
+  filter(grepl("SDorSE", interv)) %>%
+  group_by(paperID) %>%
+  summarise(SDorSE1 = unique(paperID)) #7 papers
+papers_SDorSE_mix <- dat2 %>% 
+  filter(grepl("SDorSE", interv_comm)) %>%
+  group_by(paperID) %>%
+  summarise(SDorSE2 = unique(paperID)) #0 papers
+papers_SDorSE <- (union(papers_SDorSE_pure$SDorSE1, papers_SDorSE_mix$SDorSE2)) #7 papers with either pure or/and mix SDorSE in the forest plots
+```
+
+**Answer 2.**	
+Only one (`r length(papers_PI)`) of the included 102 meta-analytic papers presented prediction intervals in a forest plot (`r round(length(papers_PI)/length(all)*100, 2)` %). Most commonly, as expected, confidence or credible intervals were used - `r length(papers_CI)` papers (`r round(length(papers_CI)/length(all)*100, 2)` %). Occasionally, also SD or SE was presented - `r length(papers_SDorSE)` papers (`r round(length(papers_SDorSE)/length(all)*100, 2)` %).   
+
+#### Figure 1
+```{r visualise PI use, include = TRUE, eval = TRUE}
+myVaggr2 <- plotVenn(list(PI = papers_PI, CI=papers_CI, SE=papers_SDorSE, all=all), nCycles = 6000) #, outFile = "myVaggr.svg"
+myVaggr2 <- plotVenn(nVennObj = myVaggr2) #re-run simulation
+#showSVG(nVennObj = myVaggr2, opacity = 0.1, borderWidth = 3)
+showSVG(nVennObj = myVaggr2, opacity = 0.1, labelRegions = F, fontScale = 3) # Avoid overlaps by hiding region labels
+```
+
+
+
+### 3a.	What is most/least prevalent graphical style of forest plot used?
+
+```{r summarise style use, eval = TRUE}
+dat2 <- dat
+#table(dat2$style)
+#table(dat2$style_comm)
+
+#group the dataset by paperID and create sets of papers that use dot
+papers_dot_pure <- dat2 %>% 
+  filter(grepl("dot", style)) %>%
+  group_by(paperID) %>%
+  summarise(dot1 = unique(paperID)) #80 papers
+papers_dot_mix <- dat2 %>% 
+  filter(grepl("dot", style_comm)) %>%
+  group_by(paperID) %>%
+  summarise(dot2 = unique(paperID)) #5 papers
+papers_dot <- (union(papers_dot_pure$dot1, papers_dot_mix$dot2)) #81 papers with either pure or/and mix dot  in the forest plots
+
+#group the dataset by paperID and create sets of papers that use bar
+papers_bar_pure <- dat2 %>% 
+  filter(grepl("bar", style)) %>%
+  group_by(paperID) %>%
+  summarise(bar1 = unique(paperID)) #3 papers
+papers_bar_mix <- dat2 %>% 
+  filter(grepl("bar", style_comm)) %>%
+  group_by(paperID) %>%
+  summarise(bar2 = unique(paperID)) #1 paper
+papers_bar <- (union(papers_bar_pure$bar1, papers_bar_mix$bar2)) #4 papers with either pure or/and mix bar in the forest plots
+
+#group the dataset by paperID and create sets of papers that use box
+papers_box_pure <- dat2 %>% 
+  filter(grepl("box", style)) %>%
+  group_by(paperID) %>%
+  summarise(box1 = unique(paperID)) #4 papers
+papers_box_mix <- dat2 %>% 
+  filter(grepl("box", style_comm)) %>%
+  group_by(paperID) %>%
+  summarise(box2 = unique(paperID)) #3 papers
+papers_box <- (union(papers_box_pure$box1, papers_box_mix$box2)) #6 papers with either pure or/and mix box in the forest plots
+```
+
+**Answer 3a.**	
+Here we looked at the main graphical plot styles: dot/box/bar. As expected, “dot” was by far be most popular - `r length(papers_dot)` papers (`r round(length(papers_dot)/length(all)*100, 2)` %), as this is the “classical” forest plot style, where also we a shape is used to represent point estimate along  with CI. There were small numbers of papers with bar plots - `r length(papers_bar)` papers (`r round(length(papers_bar)/length(all)*100, 2)` %) and box plots - `r length(papers_box)` papers (`r round(length(papers_box)/length(all)*100, 2)` %). 
+
+
+#### Figure 2
+```{r visualise style use, eval = TRUE}
+myVaggr3a <- plotVenn(list(dot=papers_dot, bar=papers_bar, box=papers_box, all=all), nCycles = 6000) #, outFile = "myVaggr.svg"
+myVaggr3a <- plotVenn(nVennObj = myVaggr3a) #re-run simulation
+#showSVG(nVennObj = myVaggr3a, opacity = 0.1, borderWidth = 3)
+showSVG(nVennObj = myVaggr3a, opacity = 0.1, labelRegions = F, fontScale = 3) # Avoid overlaps by hiding region labels
+```
+
+
+### 3b.	How often is size scaling of point estimates used in forest plots?
+
+```{r summarise scaling use, eval = TRUE}
+dat2 <- dat
+#table(dat2$scaling)
+#table(dat2$scaling_comm)
+
+#group the dataset by paperID and create sets of papers that use dot
+papers_scaling_pure <- dat2 %>% 
+  filter(scaling=="scaled") %>%
+  group_by(paperID) %>%
+  summarise(scaling1 = unique(paperID)) #15 papers
+papers_scaling_mix <- dat2 %>% 
+  filter(grepl("scale", scaling_comm)) %>%
+  group_by(paperID) %>%
+  summarise(scaling2 = unique(paperID)) #1 paper
+papers_scaling <- (union(papers_scaling_pure$scaling1, papers_scaling_mix$scaling2)) #16 papers with dot scaling in the forest plots
+```
+
+**Answer 3b.**
+Here we looked at whether dot shapes are scaled to represent their properties (sample sizes, precision, etc.) Only `r length(papers_scaling)` papers (`r round(length(papers_scaling)/length(papers_dot)*100, 2)` % of dot-style plots), used point estimate scaling in the forest plots. 
+
+#### Figure 3  
+```{r visualise dot scaling use, eval = TRUE}
+myVaggr3b <- plotVenn(list(scaling=papers_scaling, all=all), nCycles = 6000) #, outFile = "myVaggr.svg"
+myVaggr3b <- plotVenn(nVennObj = myVaggr3b) #re-run simulation
+#showSVG(nVennObj = myVaggr3b, opacity = 0.1, borderWidth = 3)
+showSVG(nVennObj = myVaggr3b, opacity = 0.1, labelRegions = F, fontScale = 3) # Avoid overlaps by hiding region labels
+```
+
+
+
+### 4. What are the frequences of presenting of aggregated data in the forest plot at the study, taxon, or other levels? How often non-aggregated data is presented?   
+
+```{r summarise aggregation level, eval = TRUE}
+dat2 <- dat
+#table(dat2$aggr)
+#table(dat2$aggr_comm)
+
+#group the dataset by paperID and create sets of papers that use taxon
+papers_taxon_pure <- dat2 %>% 
+  filter(grepl("taxon", aggr)) %>%
+  group_by(paperID) %>%
+  summarise(taxon1 = unique(paperID)) #15 papers
+papers_taxon_mix <- dat2 %>% 
+  filter(grepl("taxon", aggr_comm)) %>%
+  group_by(paperID) %>%
+  summarise(taxon2 = unique(paperID)) #16 papers
+papers_taxon <- (union(papers_taxon_pure$taxon1, papers_taxon_mix$taxon2)) #27 papers with either pure or/and mix taxon aggregation in the forest plots
+
+#group the dataset by paperID and create sets of papers that use study
+papers_study_pure <- dat2 %>% 
+  filter(grepl("study", aggr)) %>%
+  group_by(paperID) %>%
+  summarise(study1 = unique(paperID)) #12 papers
+papers_study_mix <- dat2 %>% 
+  filter(grepl("study", aggr_comm)) %>%
+  group_by(paperID) %>%
+  summarise(study2 = unique(paperID)) #5 papers
+papers_study <- (union(papers_study_pure$study1, papers_study_mix$study2)) #15 papers with either pure or/and mix study aggregation in the forest plots
+
+#group the dataset by paperID and create sets of papers that use individual
+papers_individual_pure <- dat2 %>% 
+  filter(grepl("individual", aggr)) %>%
+  group_by(paperID) %>%
+  summarise(individual1 = unique(paperID)) #4 papers
+papers_individual_mix <- dat2 %>% 
+  filter(grepl("individual", aggr_comm)) %>%
+  group_by(paperID) %>%
+  summarise(individual2 = unique(paperID)) #7 papers
+papers_individual <- (union(papers_individual_pure$individual1, papers_individual_mix$individual2)) #10 papers with either pure or/and mix individual aggregation in the forest plots
+
+#group the dataset by paperID and create sets of papers that use other
+papers_other_pure <- dat2 %>% 
+  filter(grepl("other", aggr)) %>%
+  group_by(paperID) %>%
+  summarise(other1 = unique(paperID)) #68 papers
+papers_other_mix <- dat2 %>% 
+  filter(grepl("other", aggr_comm)) %>%
+  group_by(paperID) %>%
+  summarise(other2 = unique(paperID)) #19 papers
+papers_other <- (union(papers_other_pure$other1, papers_other_mix$other2)) #77 papers with either pure or/and mix other aggregation in the forest plots
+```
+
+**Answer 4:**   
+As expected, not many studies used of “classical” forest plots (aggregated at study level) - `r length(papers_study)` papers (`r round(length(papers_study)/length(all)*100, 2)` %). There were more studies with taxon-level data aggregation forest plots - `r length(papers_taxon)` papers (`r round(length(papers_taxon)/length(all)*100, 2)` %). And, also as expected, "other aggregated" forest plots dominated - `r length(papers_other)` papers (`r round(length(papers_other)/length(all)*100, 2)` %). There were very few that showed individual effect sizes in forest plots - `r length(papers_individual)` papers (`r round(length(papers_individual)/length(all)*100, 2)` %).   
+
+#### Figure 4
+```{r visualise aggregation levels, eval = TRUE}
+myVaggr4 <- plotVenn(list(tax = papers_taxon, stu=papers_study, ind=papers_individual, all=all), nCycles = 6000) #, outFile = "myVaggr.svg"
+myVaggr4 <- plotVenn(nVennObj = myVaggr4) #re-run simulation
+#showSVG(nVennObj = myVaggr4, opacity = 0.1, borderWidth = 3)
+showSVG(nVennObj = myVaggr4, opacity = 0.1, labelRegions = F, fontScale = 3) # Avoid overlaps by hiding region labels
+
+#showSVG(nVennObj = myV3, setColors = c('#d7100b', 'teal', 'yellow', 'black')) #for changing the colors
+```
