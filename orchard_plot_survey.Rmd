@@ -234,10 +234,10 @@ Only one (`r papers_PI`; Fig.3) of the included 102 meta-analytic papers present
 
 #### Figure 1
 ```{r visualise PI use, include = TRUE, eval = TRUE}
-myVaggr2 <- plotVenn(list(PI = papers_PI, CI=papers_CI, SE=papers_SDorSE, all=all), nCycles = 6000) #, outFile = "myVaggr.svg"
+myVaggr2 <- plotVenn(list(all=all, PI = papers_PI, CI=papers_CI, SE=papers_SDorSE), nCycles = 6000) #, outFile = "myVaggr.svg"
 myVaggr2 <- plotVenn(nVennObj = myVaggr2) #re-run simulation
 #showSVG(nVennObj = myVaggr2, opacity = 0.1, borderWidth = 3)
-showSVG(nVennObj = myVaggr2, opacity = 0.1, labelRegions = F, fontScale = 3) # Avoid overlaps by hiding region labels
+showSVG(nVennObj = myVaggr2, opacity = 0.1, labelRegions = F, fontScale = 3, setColors = c('yellow', 'teal', 'red', 'green', 'black'), borderWidth = 3) # hiding region labels, big fonts, thick borders and custom colors
 ```
 
 *Legend description:*   
@@ -293,10 +293,10 @@ Here we looked at the main graphical plot styles: dot/box/bar. As expected, “d
 
 #### Figure 2
 ```{r visualise style use, eval = TRUE}
-myVaggr3a <- plotVenn(list(dot=papers_dot, bar=papers_bar, box=papers_box, all=all), nCycles = 6000) #, outFile = "myVaggr.svg"
+myVaggr3a <- plotVenn(list(all=all, dot=papers_dot, bar=papers_bar, box=papers_box), nCycles = 6000) #, outFile = "myVaggr.svg"
 myVaggr3a <- plotVenn(nVennObj = myVaggr3a) #re-run simulation
 #showSVG(nVennObj = myVaggr3a, opacity = 0.1, borderWidth = 3)
-showSVG(nVennObj = myVaggr3a, opacity = 0.1, labelRegions = F, fontScale = 3) # Avoid overlaps by hiding region labels
+showSVG(nVennObj = myVaggr3a, opacity = 0.1, labelRegions = F, fontScale = 3, setColors = c('yellow', 'teal', 'red', 'green', 'black'), borderWidth = 3) # hiding region labels, big fonts, thick borders and custom colors
 ```
 
 *Legend description:*   
@@ -330,10 +330,10 @@ Here we looked at whether dot shapes are scaled to represent their properties (s
 
 #### Figure 3  
 ```{r visualise dot scaling use, eval = TRUE}
-myVaggr3b <- plotVenn(list(scaling=papers_scaling, all=all), nCycles = 6000) #, outFile = "myVaggr.svg"
+myVaggr3b <- plotVenn(list(all=all, scaling=papers_scaling), nCycles = 6000) #, outFile = "myVaggr.svg"
 myVaggr3b <- plotVenn(nVennObj = myVaggr3b) #re-run simulation
 #showSVG(nVennObj = myVaggr3b, opacity = 0.1, borderWidth = 3)
-showSVG(nVennObj = myVaggr3b, opacity = 0.1, labelRegions = F, fontScale = 3) # Avoid overlaps by hiding region labels
+showSVG(nVennObj = myVaggr3b, opacity = 0.1, labelRegions = F, fontScale = 3, setColors = c('yellow', 'teal', 'red', 'green', 'black'), borderWidth = 3) # hiding region labels, big fonts, thick borders and custom colors
 ```
 
 *Legend description:*   
@@ -422,10 +422,10 @@ And a few other interesting plots (looking like an orchard plot):
 #### Figure 4   
 
 ```{r visualise aggregation levels, eval = TRUE}
-myVaggr4 <- plotVenn(list(taxon_aggr = papers_taxon, study_aggr=papers_study, individual_aggr=papers_individual, all_papers=all), nCycles = 6000) #, outFile = "myVaggr.svg"
+myVaggr4 <- plotVenn(list(all_papers=all, taxon_aggr = papers_taxon, study_aggr=papers_study, individual_aggr=papers_individual), nCycles = 6000) #, outFile = "myVaggr.svg"
 myVaggr4 <- plotVenn(nVennObj = myVaggr4) #re-run simulation
 #showSVG(nVennObj = myVaggr4, opacity = 0.1, borderWidth = 3)
-showSVG(nVennObj = myVaggr4, opacity = 0.1, labelRegions = F, fontScale = 3) # Avoid overlaps by hiding region labels
+showSVG(nVennObj = myVaggr4, opacity = 0.1, labelRegions = F, fontScale = 3, setColors = c('yellow', 'teal', 'red', 'green', 'black'), borderWidth = 3) # hiding region labels, big fonts, thick borders and custom colors
 
 #with hand-picked "real forest" papaer added:
 real_forest <- c("ft037", "ft065", "ft078", "ft082", "ft084", "ft098", "ft109", "ft112", "ft131", "ft148", "ft151", "ft167", "ft173", "ft175", "ft177", "ft181")
