@@ -535,4 +535,33 @@ Final list of papers presenting "overlaid" forest-like plots (with relevant figu
 The remaining assessed papers were excluded due to all relevant figures not overlaying individual effect size dots onto aggregated effect sizes.   
   
 
+ #### Preparing for STAGE2 survey
  
+Coding forest-like plots with "aggregated effect sizes" to assess how often overall mean is presented alongside and how aggregeated effect sizes are calculated (for details see data collection protocol for STAGE2).   
+
+List of papers and figures to be assessed:   
+
+```{r create list of plots to be assessed in STAGE2, eval = TRUE} 
+
+#length(all) #all 84 paper IDs
+#length(dat$fileID) #all file IDs = 296
+classical_IDs <- c("ft065_fig1", "ft065_fig2.png", "ft065_fig3.png", "ft078_figS1", "ft082_figS4", "ft098_fig2", "ft112_fig2", "112_fig3", "112_figS3","112_figS4", "112_figS5", "ft131_fig1",  "ft148_figS2", "148_figS4", "148_figS7", "148_figS10", "148_figS18", "148_figS19", "ft151_fig1", "ft167_fig2", "167_figSB", "ft173_fig2", "ft175_figS4", "175_figS5", "175_figS6", "175_figS7", "ft177_fig2")  
+ 
+files_individual_pure <- c("ft109_figS10", "ft109_figS12", "ft109_figS13", "ft109_figS14", "ft109_figS9",  "ft120_fig4",   "ft121_fig1",   "ft148_figS10")
+
+#exclude "classical" forest plots and "individual" forest plots
+toasses <- setdiff(dat$fileID, classical_IDs) 
+toasses <- setdiff(toasses, files_individual_pure) 
+
+dat7 <- dat %>% filter(fileID %in% toasses) %>% select(paperID, fileID) %>% group_by(paperID) %>% summarise(figures = paste(fileID, collapse=", "))
+dat7 <- dat7 %>% filter(paperID != "ft065") #exclude ft065 - no aggregated forest plots there
+
+dat7
+# making a scrollable table
+kable(dat7, "html") %>%
+  kable_styling("striped", position = "left") %>%
+  scroll_box(width = "100%", height = "500px")
+
+```
+
+
