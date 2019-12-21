@@ -36,13 +36,10 @@ echo = TRUE
 rm(list=ls())
 ```
 
-## Setups
-
-### Loading packages and custom functions
+## Setup
+Loading packages and custom functions.   
 
 ```{r load packages, eval = TRUE}
-# loading packages
-# devtools::install_github("thomasp85/patchwork")
 pacman::p_load(tidyverse, # tidy family and related pacakges below
                readxl, #read Excel files
                kableExtra, # add features to a kable() output 
@@ -54,7 +51,6 @@ pacman::p_load(tidyverse, # tidy family and related pacakges below
                plotly,     # interactive plots using ggplot2
                png,         # reading png files
                grid,        # graphic layout manipulation
-               #patchwork    # putting ggplots together - you need to install via devtool
                formatR, # provides a function tidy_source() to format R source automatically
                nVennR, # Venn diagrams https://cran.r-project.org/web/packages/nVennR/vignettes/nVennR.html
                rsvg, #displaying svg plots from nVennR
@@ -78,30 +74,34 @@ We designed a data extraction form to collect information on the features of the
 We also coded point estimates type (individual effect size for non-aggregated data / mean – mean value of aggregated effect sizes / median – median value of aggregated effect sizes / mixed – combination of any of the above, e.g., both aggregated and individual data points presented alongside, as in the proposed orchard plot), 
 other/uncertain – cannot be easily classified as any of the above (discuss or exclude later), interval estimates type (CI – confidence interval or credible intervals / PI – prediction intervals (note that prediction intervals are also known as “credibility intervals”) / SD or SE – standard deviations or standard errors / mixed – combination of any of the above, e.g., both CI and PI are presented) and whether point/shape was of variable size due to scaling (unscaled – all points/dots/shapes are same size / scaled – points/dots/shapes have variable sizes to represent some additional point property, e.g., sample size / mixed – combination of any of the above, e.g., both unscaled and scaled points/dots/shapes are presented).   
 
-Two researchers (ML, JR) accessed at the extracted figures and classified their properties. They discussed and resolved any disagreements in the coded data.   
+Two researchers (ML, JR) assessed extracted figures and classified their properties. They discussed and resolved any disagreements in the coded data.   
 
-We processed the coded data to create a paper-level table, with one consensus record per table, with information  that allows us to answer the following questions [with predictions]:   
+We processed the coded data to create a paper-level table, with one consensus record per table, with information  that allowed us to answer the following questions [with predictions]:   
 
  1.	How many papers (proportion) present some form of forest plots? (at this stage we could not tell which of these are “classical/original” forest plots, the more detailed questions below with more detailed coding were used to assess this). [We expected that it is commonly used].   
 
  2.	How many papers (proportion) present prediction interval in forest plots? (basing on the coding). [We did not expect many; we expected mean with CI to be commonly used to present point estimates and interval estimates].     
  
- 3.	What is most/least prevalent graphical style of forest plot used?. Here we looked at the main graphical plot styles: dot/box/bar and whether point estimates size is scaled. [We expected “dot” to be most popular, as this is the “classical/original” forest plot style; we expected dot scaling to be likely underutilised].   
+ 3.	What is most/least prevalent graphical style of forest plot used? Here we looked at the main graphical plot styles: dot/box/bar and whether point estimates size is scaled. [We expected “dot” to be most popular, as this is the “classical/original” forest plot style; we expected dot scaling to be likely underutilised].   
 
  4.	What are the frequences of aggregated data in the forest plot at the study, taxon, or other levels? How often non-aggregated data is presented? [We expected there should be many studies with taxon-level aggregation, but "other aggregated" could dominate].    
 
  5. What is the frequency of "classical/original" forest plots? [We expected few occurrences of “classical/original” forest plots (showing all individual effect sizes used in an meta-analysis alongside their mean, in a "dot" graphical style)].   
 
 
-**Extended Data Table 1 [TODO IF NEEDED]:**   
-Citations for 102 representative meta-analytic papers publushed in ecology and/or evolution journals.    
-*Columns to use: paper ID + full citation*   
+**Extended Data Table 1:**   
 
-```{r list of papers, include = FALSE, eval = FALSE}
-# getting the data and formating some variables (turning chraracter vectors to factors)
-# read_csv("../data/lit_search.csv", na = "NA") %>% 
-#    mutate_if(is.character, as.factor) %>%  kable("html") %>%
-#    kable_styling("striped", position = "left")
+List of 102 representative meta-analytic papers publushed in ecology and/or evolution journals.    
+
+```{r list of papers, include = TRUE, eval = TRUE}
+# getting the papers data and formating some variables (turning chraracter vectors to factors)
+papers_data <- read_excel("../data/forest_plot_fulltext_records.xlsx", na = "NA") %>% 
+   mutate_if(is.character, as.factor)
+#str(papers_data) #102 papers
+#retain fulltext_ID, authors, pub_year, title, journal, volume, pages and make scrollable table:
+papers_data %>% select(fulltext_ID, authors, pub_year, title, journal, volume, pages) %>% kable("html") %>%
+    kable_styling("striped", position = "left") %>%
+  scroll_box(width = "100%", height = "300px")
 ```
 
 
@@ -109,14 +109,11 @@ Citations for 102 representative meta-analytic papers publushed in ecology and/o
 
 ### Dataset summary
 
-From the list of the files ID's in the dataset assessed how many papers presented some kind of forest plot (see the Table below).
-
-**Extended Data Table 2:** 
-The simplified dataset from the literature survey of 102 meta-analytic papers in ecology or evolution.
+From the list of the files ID's in the dataset we assessed how many papers presented some kind of forest or forest-like plot (see the Table below).
 
 ```{r load coded data, eval = TRUE}
 # getting the data and formating some variables (turning chraracter vectors to factors)
-full_data <- read_excel("./data/Data collection for the _orchard plot_ manuscript (Responses)_cleaning2_ML.xlsx", na = "NA") %>% 
+full_data <- read_excel("../data/Data collection for the _orchard plot_ manuscript (Responses)_cleaning2_ML.xlsx", na = "NA") %>% 
    mutate_if(is.character, as.factor)
 #str(full_data) #each row represents one scoring attempt, so it is usually 2 rows per figure file (since 2 people were assessing independently)
 ```
@@ -171,11 +168,16 @@ dat <- dat %>%
   select(paperID, everything())
 
 all <- unique(dat$paperID) #IDs of all papers
+```
 
+**Extended Data Table 2:** 
+The simplified dataset from the literature survey of 102 meta-analytic papers in ecology or evolution.
+
+```{r table of coded data, eval = TRUE}
 # making a scrollable table
 kable(dat, "html") %>%
   kable_styling("striped", position = "left") %>%
-  scroll_box(width = "100%", height = "500px")
+  scroll_box(width = "100%", height = "300px")
 ```
 
 
@@ -184,7 +186,7 @@ kable(dat, "html") %>%
 
 ### 1. How many papers (proportion) present some form of forest plots?       
 **Answer 1.**	   
-Forest plot are commonly used in ecology and evolution meta analytic papers - `r length(unique(dat$paperID))` papers (`r round(length(unique(dat$paperID))/102*100, 2)` %) of our data set had at least one forest plot-like figure.    
+Forest plot are commonly used in ecology and evolution - `r length(unique(dat$paperID))` papers (`r round(length(unique(dat$paperID))/102*100, 2)` %) of our data set had at least one forest plot-like figure.    
 
 
 
@@ -451,62 +453,61 @@ We used the following "original/classical" forest plot definition:
 
 **Answer 5.**  
 Final list of papers presenting "original/classical" forest plots (with relevant figure file ID):     
- 1. ft065 (ft065_fig1.png, ft065_fig2.png, ft065_fig3.png)   
- 2. ft078 (ft078_figS1.png)   
- 3. ft082 (ft082_figS4.png)    
- 4. ft098 (ft098_fig2.png)   
- 5 ft112 (ft112_fig2.png, ft112_fig3.png, ft112_figS3.png, ft112_figS4.png, ft112_figS5.png)  
- 6. ft131 (ft131_fig1.png)  
- 7 ft148 (ft148_figS2.png, ft148_figS4.png, ft148_figS7.png, ft148_figS10.png, ft148_figS18.png, ft148_figS19.png)    8. ft151 (ft151_fig1.png)   
- 9. ft167 (ft167_fig2.png, ft167_figSB.png)  
- 10. ft173 (ft173_fig2.png)  
- 11. ft175 (ft175_figS4.png, ft175_figS5.png, ft175_figS6.png, ft175_figS7.png)   
- 12. ft177 (ft177_fig2.png)   
-
- 
+  
 ```{r refined included papers with classical forest plot, eval = TRUE} 
+ # 1. ft065 (ft065_fig1.png, ft065_fig2.png, ft065_fig3.png)   
+ # 2. ft078 (ft078_figS1.png)   
+ # 3. ft082 (ft082_figS4.png)    
+ # 4. ft098 (ft098_fig2.png)   
+ # 5 ft112 (ft112_fig2.png, ft112_fig3.png, ft112_figS3.png, ft112_figS4.png, ft112_figS5.png)  
+ # 6. ft131 (ft131_fig1.png)  
+ # 7 ft148 (ft148_figS2.png, ft148_figS4.png, ft148_figS7.png, ft148_figS10.png, ft148_figS18.png, ft148_figS19.png)  #  8. ft151 (ft151_fig1.png)   
+ # 9. ft167 (ft167_fig2.png, ft167_figSB.png)  
+ # 10. ft173 (ft173_fig2.png)  
+ # 11. ft175 (ft175_figS4.png, ft175_figS5.png, ft175_figS6.png, ft175_figS7.png)   
+ # 12. ft177 (ft177_fig2.png) 
+
 dat5 <- dat %>% filter(paperID %in% c("ft065", "ft078", "ft082", "ft098", "ft112", "ft131", "ft148", "ft151", "ft167", "ft173", "ft175", "ft177")) %>% select(paperID, fileID, scaling) %>% group_by(paperID) %>% summarise(figures = paste(fileID, collapse=", ", scaling))
 
 # making a scrollable table
 kable(dat5, "html") %>%
   kable_styling("striped", position = "left") %>%
-  scroll_box(width = "100%", height = "500px")
+  scroll_box(width = "100%", height = "300px")
   
 ```
 
-The remaining assessed papers were excluded due to all relevant figures not showing the overall mean effect size  in same plot panel.      
+The remaining assessed papers were excluded due to not showing the overall mean effect size in the same plot panel.      
 
   
 ## Additional refinements   
 
 ### 6. What is the frequency of forest-like plots with species as aggregation levels?    
 
-To answer this question we manually re-evaluated the subset of `r length(papers_taxon)` papers which had presented some sort of taxonomic groups for aggregating of effect sizes. We then created a list of papers conatining at least one plot with specis-level aggregation of effect sizes.     
+To answer this question we manually re-evaluated the subset of `r length(papers_taxon)` papers which used some sort of taxonomic grouping for aggregating effect sizes. We then created a list of papers conatining at least one plot with specis-level aggregation of effect sizes.     
 
 IDs of papers re-evaluated papers: `r sort(papers_taxon)`     
 
 **Answer 6.**  
 Final list of papers presenting "species" forest-like plots (with relevant figure file ID):     
- 1. ft024 (ft024_fig1.png, ft024_fig5.png)   
- 2. ft028 (ft140_figS1.png)    
- 3. ft060 (ft060_fig2.png (a))   
- 4. ft068 (ft068_fig2.png)     
- 5. ft117 (ft117_fig2.png, ft117_figS1.png, ft117_figS2.png, ft117_figS3.png)   
- 6. ft140 (ft140_fig3.png (a))   
- 7. ft187 (ft187_fig1.png (a), ft187_figS1.png, ft187_figS2.png, ft187_figS3.png)   
 
 ```{r included papers with classical forest plot, eval = TRUE} 
+ # 1. ft024 (ft024_fig1.png, ft024_fig5.png)   
+ # 2. ft028 (ft140_figS1.png)    
+ # 3. ft060 (ft060_fig2.png (a))   
+ # 4. ft068 (ft068_fig2.png)     
+ # 5. ft117 (ft117_fig2.png, ft117_figS1.png, ft117_figS2.png, ft117_figS3.png)   
+ # 6. ft140 (ft140_fig3.png (a))   
+ # 7. ft187 (ft187_fig1.png (a), ft187_figS1.png, ft187_figS2.png, ft187_figS3.png)   
+ 
 dat6 <- dat %>% filter(paperID %in% c("ft024", "ft028", "ft060", "ft068", "ft117", "ft140", "ft187")) %>% select(paperID, fileID, scaling) %>% group_by(paperID) %>% summarise(figures = paste(fileID, collapse=", ", scaling))
 
 # making a scrollable table
 kable(dat6, "html") %>%
   kable_styling("striped", position = "left") %>%
-  scroll_box(width = "100%", height = "500px")
-  
+  scroll_box(width = "100%", height = "300px")
 ```
  
-The remaining assessed papers were excluded due to all relevant figures aggregating effect sizes at higher taxonomic levels than species. Notable special cases: ft084 - figures present mixture of species and higher taxonomic levels; ft131 - figures present aggregation is at both species and study level, i.e. no single estimate per species.   
-
+The remaining assessed papers were excluded due to aggregation of effect sizes at higher taxonomic levels than species. Notable special cases: ft084 - figures present mixture of species and higher taxonomic levels; ft131 - figures present aggregation is at both species and study level, i.e. no single estimate per species.   
 
 ```{r visualise real and species and other aggr plots, eval = TRUE}
 
@@ -522,7 +523,7 @@ showSVG(nVennObj = myVaggr6, opacity = 0.1, labelRegions = F, fontScale = 3, set
 
 ### 7. What is the frequency of forest-like plots with individual effect sizes overlaid as dots over aggregated effect estimates? Are these individual dots scaled to the effect size (e.g., using sample size, precision)?       
 
-To answer this question we manually re-evaluated the subset of `r length(papers_individual)` papers which had presented some sort of individual effect size in forest plots (other that presenting effect sizes by study).  We then created a list of papers conatining at least one plot with individual effect sizes presented as dots overlaid over estimates of aggregated effect sizes.    
+To answer this question, we manually re-evaluated the subset of `r length(papers_individual)` papers which had presented some sort of individual effect size in forest plots (other that presenting effect sizes by study).  We then created a list of papers conatining at least one plot with individual effect sizes presented as dots overlaid over estimates of aggregated effect sizes.    
 
 IDs of papers re-evaluated papers: `r sort(papers_individual)`    
 
@@ -532,8 +533,10 @@ Final list of papers presenting "overlaid" forest-like plots (with relevant figu
  1. ft096 (ft096_fig1.png, ft096_fig2.png, ft096_figS2.png, ft096_figS3.png, ft096_figS4.png, ft096_figS5.png) - individual effect size dots scaled    
  2. ft181 (ft181_fig2.png, ft181_fig3.png, ft181_fig4.png) - individual effect size dots not scaled      
  
-The remaining assessed papers were excluded due to all relevant figures not overlaying individual effect size dots onto aggregated effect sizes.   
+The remaining assessed papers were excluded due to all relevant figures not overlaying individual effect size dots onto aggregated effect sizes.    
   
+  
+    
 
 #### Preparing for STAGE2 survey
  
@@ -556,15 +559,137 @@ toasses <- setdiff(toasses, files_individual_pure)
 dat7 <- dat %>% filter(fileID %in% toasses) %>% select(paperID, fileID) %>% group_by(paperID) %>% summarise(figures = paste(fileID, collapse=", "))
 dat7 <- dat7 %>% filter(paperID != "ft065") #exclude ft065 - no aggregated forest plots there
 
-dat7
 # making a scrollable table
 kable(dat7, "html") %>%
   kable_styling("striped", position = "left") %>%
-  scroll_box(width = "100%", height = "500px")
-
+  scroll_box(width = "100%", height = "300px")
 ```
+
 
 #### STAGE2 survey coding - results
 
+During STAGE2, two researchers (ML, YY) assessed the extracted figures that were earlier classified as presenting forest plot-like aggregated effect estimates. They classified additional properties of these plots: whether overall meta-analytic mean was presented in the same plot (for each relevant figure panel). Thepliot coding was done on 10 randomly selected figures, then YY conducted main extraction of all figures, with all labelled as other/unsure at any point, checked and discussed with ML.
 
-Data collection for the _orchard plot_ manuscript - STAGE2 (Responses)_cleaned.xlsx
+The questions to be answered by STAGE2 coding:   
+ 8. Do forest-like plots present an overall meat-analytic mean?    
+ 9. Do forest-like plots present point estimates calculated separately for subsets of data (like in medical “summary forest plot”, where a meta-analytic model is run for each subset of effect sizes and meta-analytic mean for the subset is presented, so called “subgroup analysis” in medicine) or these point estimates are based on meta-regressions models (i.e. model on all data with a moderator(s)).
+
+PREDICTIONS: in EcoEvo – we have a mixture of forest-like plots (based meta-regressions, without overall mean) and summary forest plots (based on subgroup analyses, often with overall mean). The latter should be considered a part of the former.   
+
+```{r load coded data STAGE2, eval = TRUE}
+# getting the data and formating some variables (turning chraracter vectors to factors)
+S2_data <- read_excel("../data/Data collection for the _orchard plot_ manuscript - STAGE2 (Responses)_cleaned.xlsx", na = "NA") %>% 
+   mutate_if(is.character, as.factor)
+#str(S2_data) #each row represents one scoring attempt, so it is usually 2 rows per figure file (since 2 people were assessing independently)
+```
+
+```{r clean coded data STAGE2, include = FALSE, eval = TRUE}
+#remove all rows with censor==1, so that only one final score is left for each figure file
+S2_data <- S2_data  %>% filter(censor == 0)
+S2_data <- droplevels(S2_data) #adjust factor levels
+
+#remove unnecessary columns and rename the other
+S2_data <- S2_data  %>% select(-ends_with("same"), -censor, -Timestamp, -"Assessor's name", -"Is this an aggregarted forest-like plot")
+S2_data <- S2_data  %>% rename(fileID = "Forest plot file name", 
+                       N_panels = "How many similar panels with aggregated forest-like plots are being coded?",
+                       panel_comm = "If more than 1 panel in the figure, list which similar panels are being coded together:",
+                       overall_mean = "overall_mean: Do these forest-like plots present an overall meta-analytic mean?",
+                       overall_mean_comm = "overall_mean comment:",
+                       aggr_estimate_by = "aggr_estimate_by: way of calculating aggregated point estimates",
+                       aggr_estimate_by_comm = "aggr_estimate_by comment (note the info you besed your decision on, ego copy relevant text fragment and note its location, e.g., p5):",
+                       comm = "Comment - overall:"
+                       )
+
+#names(S2_data)
+#length(unique(S2_data$fileID)) #237 figures assessed
+#sum(S2_data$N_panels) #607 plots assessed
+#table(S2_data$N_panels)
+#table(S2_data$overall_mean)
+levels(S2_data$overall_mean) <- c("no", "yes") #shorten level codes
+#table(S2_data$overall_mean)
+#table(S2_data$aggr_estimate_by)
+levels(S2_data$aggr_estimate_by) <- c("meta-analysis", "meta-regression", "meta-regression") #shorten level codes
+#table(S2_data$aggr_estimate_by)
+
+#extract paperID
+S2_data$paperID <- substr(S2_data$fileID, 1,5)
+length(unique(S2_data$paperID)) #77
+all <- unique(S2_data$paperID) #IDs of all papers
+
+#re-arrange columns
+S2_data <- S2_data %>%
+  select(paperID, everything())
+
+# making a scrollable table
+kable(S2_data, "html") %>%
+  kable_styling("striped", position = "left") %>%
+  scroll_box(width = "100%", height = "300px")
+```
+
+```{r summarise overall mean use STAGE2, eval = TRUE}
+S2_data1 <- S2_data
+#table(S2_data1$overall_mean)
+#table(S2_data1$overall_mean_comm)
+
+#we want to do it per plot - need to add up number of panles per figure in each group  each 
+#sum(S2_data1$N_panels) #607 plots assessed
+
+#group the dataset by overall_mean type and create sets of papers for each one:
+sum_overall_mean <- S2_data %>% 
+  #filter(overall_mean=="yes") %>%
+  group_by(overall_mean) %>%
+  summarise(sum = sum(N_panels)) 
+#sum(sum_overall_mean$sum)
+sum_overall_mean$percent <- sum_overall_mean$sum / sum(sum_overall_mean$sum) *100 #add column with percentages
+#sum_overall_mean
+
+papers_with_overall_mean <- S2_data1 %>% 
+  filter(overall_mean=="yes") %>%
+  group_by(paperID) %>%
+  summarise(overall_mean = unique(paperID))
+#dim(papers_with_overall_mean) #31 (out of 77) papers
+
+papers_without_overall_mean <- S2_data1 %>% 
+  filter(overall_mean=="no") %>%
+  group_by(paperID) %>%
+  summarise(overall_mean = unique(paperID))
+#dim(papers_without_overall_mean) #64 (out of 77) papers
+#(dim(papers_with_overall_mean)[1] + dim(papers_without_overall_mean)[1] - length(unique(S2_data1$paperID)))/2 # 9 papers with both plots with and without overall mean
+```
+
+**Answer 8.**	   
+Overall mean is not commonly presented alongsiet aggregated point estimates in forest-like plots - only `r sum_overall_mean[2,2]` (`r round(sum_overall_mean[2,3], 2)` %) out of `r sum(sum_overall_mean$sum)` aggeregated forest-like plots assessed.    
+
+```{r summarise meta-regression use STAGE2, eval = TRUE}
+S2_data2 <- S2_data
+#table(S2_data2$aggr_estimate_by)
+#table(S2_data2$aggr_estimate_by_comm)
+
+#we want to do it per plot - need to add up number of panles per figure in each group  each 
+#sum(S2_data2$N_panels) #607 plots assessed
+
+#group the dataset by overall_mean type and create sets of papers for each one:
+sum_aggr_estimate_by <- S2_data2 %>% 
+  #filter(aggr_estimate_by=="meta-analysis") %>%
+  group_by(aggr_estimate_by) %>%
+  summarise(sum = sum(N_panels)) 
+#sum(sum_overall_mean$sum)
+sum_aggr_estimate_by$percent <- sum_aggr_estimate_by$sum / sum(sum_aggr_estimate_by$sum) *100 #add column with percentages
+
+papers_with_metaregression <- S2_data2 %>% 
+  filter(aggr_estimate_by=="meta-regression") %>%
+  group_by(paperID) %>%
+  summarise(sum_aggr_estimate_by = unique(paperID))
+#dim(papers_with_metaregression) #73 (out of 77) papers
+
+papers_with_metaanalysis <- S2_data2 %>% 
+  filter(aggr_estimate_by=="meta-analysis") %>%
+  group_by(paperID) %>%
+  summarise(overall_mean = unique(paperID)) 
+#dim(papers_with_metaanalysis) #14 (out of 77) papers
+#(dim(papers_with_metaregression)[1] + dim(papers_with_metaanalysis)[1] - length(unique(S2_data2$paperID)))/2 # 9 papers with both plots with meta-analysis and meta-regression
+```
+
+**Answer 9.**	   
+Most commonly, forest-like plots in ecology and evolution are based on meta-regression models -  `r sum_aggr_estimate_by[2,2]` (`r round(sum_aggr_estimate_by[2,3], 2)` %) out of `r sum(sum_aggr_estimate_by$sum)` aggeregated forest-like plots assessed.    
+
