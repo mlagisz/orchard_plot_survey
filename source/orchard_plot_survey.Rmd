@@ -95,7 +95,7 @@ List of 102 representative meta-analytic papers publushed in ecology and/or evol
 
 ```{r list of papers, include = TRUE, eval = TRUE}
 # getting the papers data and formating some variables (turning chraracter vectors to factors)
-papers_data <- read_excel("../data/forest_plot_fulltext_records.xlsx", na = "NA") %>% 
+papers_data <- read_excel("./data/forest_plot_fulltext_records.xlsx", na = "NA") %>% 
    mutate_if(is.character, as.factor)
 #str(papers_data) #102 papers
 #retain fulltext_ID, authors, pub_year, title, journal, volume, pages and make scrollable table:
@@ -113,7 +113,7 @@ From the list of the files ID's in the dataset we assessed how many papers prese
 
 ```{r load coded data, eval = TRUE}
 # getting the data and formating some variables (turning chraracter vectors to factors)
-full_data <- read_excel("../data/Data collection for the _orchard plot_ manuscript (Responses)_cleaning2_ML.xlsx", na = "NA") %>% 
+full_data <- read_excel("./data/Data collection for the _orchard plot_ manuscript (Responses)_cleaning2_ML.xlsx", na = "NA") %>% 
    mutate_if(is.character, as.factor)
 #str(full_data) #each row represents one scoring attempt, so it is usually 2 rows per figure file (since 2 people were assessing independently)
 ```
@@ -231,7 +231,7 @@ papers_SDorSE_mix <- dat2 %>%
 papers_SDorSE <- (union(papers_SDorSE_pure$SDorSE1, papers_SDorSE_mix$SDorSE2)) #7 papers with either pure or/and mix SDorSE in the forest plots
 ```
 
-**Answer 2.**	
+**Answer 2.**	 [MAKE TABLE WITH REFS!]
 Only one (`r papers_PI`; Fig.3) of the included 102 meta-analytic papers presented prediction intervals in a forest plot (`r round(length(papers_PI)/length(all)*100, 2)` %). Most commonly, as expected, confidence or credible intervals were used - `r length(papers_CI)` papers (`r round(length(papers_CI)/length(all)*100, 2)` %). Occasionally, also SD or SE was presented - `r length(papers_SDorSE)` papers (`r round(length(papers_SDorSE)/length(all)*100, 2)` %).   
 
 #### Figure 1
@@ -327,7 +327,7 @@ papers_scaling_mix <- dat2 %>%
 papers_scaling <- (union(papers_scaling_pure$scaling1, papers_scaling_mix$scaling2)) #16 papers with dot scaling in the forest plots
 ```
 
-**Answer 3b.**
+**Answer 3b.**  [MAKE TABLE WITH REFS!]
 Here we looked at whether dot shapes are scaled to represent their properties (sample sizes, precision, etc.) Only `r length(papers_scaling)` papers (`r round(length(papers_scaling)/length(papers_dot)*100, 2)` % of dot-style plots), used point estimate scaling in the forest plots.   
 
 #### Figure 3  
@@ -396,7 +396,7 @@ papers_other_mix <- dat2 %>%
 papers_other <- (union(papers_other_pure$other1, papers_other_mix$other2)) #77 papers with either pure or/and mix other aggregation in the forest plots
 ```
 
-**Answer 4.**   
+**Answer 4.**    [MAKE TABLE WITH REFS!]
 As expected, not many studies used of “classical” forest plots (aggregated at study level) - `r length(papers_study)` papers (`r round(length(papers_study)/length(all)*100, 2)` %). There were more studies with taxon-level data aggregation forest plots - `r length(papers_taxon)` papers (`r round(length(papers_taxon)/length(all)*100, 2)` %). And, also as expected, "other aggregated" forest plots dominated - `r length(papers_other)` papers (`r round(length(papers_other)/length(all)*100, 2)` %). There were very few that showed individual effect sizes in forest plots - `r length(papers_individual)` papers (`r round(length(papers_individual)/length(all)*100, 2)` %).   
 
 
@@ -487,7 +487,7 @@ To answer this question we manually re-evaluated the subset of `r length(papers_
 
 IDs of papers re-evaluated papers: `r sort(papers_taxon)`     
 
-**Answer 6.**  
+**Answer 6.**   [MAKE TABLE WITH REFS!]
 Final list of papers presenting "species" forest-like plots (with relevant figure file ID):     
 
 ```{r included papers with classical forest plot, eval = TRUE} 
@@ -527,7 +527,7 @@ To answer this question, we manually re-evaluated the subset of `r length(papers
 
 IDs of papers re-evaluated papers: `r sort(papers_individual)`    
 
-**Answer 7.**  
+**Answer 7.**  [MAKE TABLE WITH REFS!]
 Final list of papers presenting "overlaid" forest-like plots (with relevant figure file ID):     
  1. ft039 (ft096_fig3.png (odd, with box plots)) - individual effect size dots not scaled    
  1. ft096 (ft096_fig1.png, ft096_fig2.png, ft096_figS2.png, ft096_figS3.png, ft096_figS4.png, ft096_figS5.png) - individual effect size dots scaled    
@@ -578,7 +578,7 @@ PREDICTIONS: in EcoEvo – we have a mixture of forest-like plots (based meta-re
 
 ```{r load coded data STAGE2, eval = TRUE}
 # getting the data and formating some variables (turning chraracter vectors to factors)
-S2_data <- read_excel("../data/Data collection for the _orchard plot_ manuscript - STAGE2 (Responses)_cleaned.xlsx", na = "NA") %>% 
+S2_data <- read_excel("./data/Data collection for the _orchard plot_ manuscript - STAGE2 (Responses)_cleaned.xlsx", na = "NA") %>% 
    mutate_if(is.character, as.factor)
 #str(S2_data) #each row represents one scoring attempt, so it is usually 2 rows per figure file (since 2 people were assessing independently)
 ```
@@ -659,6 +659,7 @@ papers_without_overall_mean <- S2_data1 %>%
 
 **Answer 8.**	   
 Overall mean is not commonly presented alongsiet aggregated point estimates in forest-like plots - only `r sum_overall_mean[2,2]` (`r round(sum_overall_mean[2,3], 2)` %) out of `r sum(sum_overall_mean$sum)` aggeregated forest-like plots assessed.    
+ [MAKE TABLE WITH REFS!]
 
 ```{r summarise meta-regression use STAGE2, eval = TRUE}
 S2_data2 <- S2_data
@@ -693,3 +694,4 @@ papers_with_metaanalysis <- S2_data2 %>%
 **Answer 9.**	   
 Most commonly, forest-like plots in ecology and evolution are based on meta-regression models -  `r sum_aggr_estimate_by[2,2]` (`r round(sum_aggr_estimate_by[2,3], 2)` %) out of `r sum(sum_aggr_estimate_by$sum)` aggeregated forest-like plots assessed.    
 
+ [MAKE TABLE WITH REFS!]
