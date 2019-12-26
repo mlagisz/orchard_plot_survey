@@ -71,7 +71,7 @@ List of 102 representative meta-analytic papers publushed in ecology and/or evol
 
 ```{r list of papers, include = TRUE, eval = TRUE}
 # getting the papers data and formating some variables (turning chraracter vectors to factors)
-papers_data <- read_excel("./data/forest_plot_fulltext_records.xlsx", na = "NA") %>% 
+papers_data <- read_excel("../data/forest_plot_fulltext_records.xlsx", na = "NA") %>% 
    mutate_if(is.character, as.factor)
 #str(papers_data) #102 papers
 #retain fulltext_ID, authors, pub_year, title, journal, volume, pages and make scrollable table:
@@ -111,8 +111,7 @@ Data loading and preprocessing. Prepocessed data is presented in Extended Data T
 
 ```{r load coded data, eval = TRUE}
 # getting the data and formating some variables (turning chraracter vectors to factors)
-full_data <- read_excel("./data/Data collection for the _orchard plot_ manuscript (Responses)_cleaning2_ML.xlsx", na = "NA") %>% 
-   mutate_if(is.character, as.factor)
+full_data <- read_excel("../data/Data collection for the _orchard plot_ manuscript (Responses)_cleaning2_ML.xlsx", na = "NA") %>%    mutate_if(is.character, as.factor)
 #str(full_data) #each row represents one scoring attempt, so it is usually 2 rows per figure file (since 2 people were assessing independently)
 ```
 
@@ -178,12 +177,12 @@ kable(dat, "html") %>%
   scroll_box(width = "100%", height = "300px")
 ```
 
-
-From the list of the files ID's in the dataset we assessed how many papers presented some kind of forest or forest-like plot (see the Table below).
+  
 
 ### 1. How many papers (proportion) present some form of forest plots?       
+   
 **Answer 1.**	   
-Forest plot are commonly used in ecology and evolution - `r length(unique(dat$paperID))` papers (`r round(length(unique(dat$paperID))/102*100, 2)` %) of our data set had at least one forest plot-like figure.    
+Forest plot are commonly used in ecology and evolution - `r length(unique(dat$paperID))` papers (`r round(length(unique(dat$paperID))/102*100, 2)`%) of our data set had at least one forest plot-like figure.    
 
 
 ### 2.	How many papers (and proportion or papers with forest plots) present prediction interval in forest plots?  
@@ -228,7 +227,7 @@ papers_SDorSE <- (union(papers_SDorSE_pure$SDorSE1, papers_SDorSE_mix$SDorSE2)) 
 ```
 
 **Answer 2.**	
-Only one (`r papers_PI`; Fig.3) of the included 102 meta-analytic papers presented prediction intervals in a forest plot (`r round(length(papers_PI)/length(all)*100, 2)` %). Most commonly, as expected, confidence or credible intervals were used - `r length(papers_CI)` papers (`r round(length(papers_CI)/length(all)*100, 2)` %). Occasionally, also SD or SE was presented - `r length(papers_SDorSE)` papers (`r round(length(papers_SDorSE)/length(all)*100, 2)` %).   
+Only one (`r papers_PI`; Fig.3) of the included 102 meta-analytic papers presented prediction intervals in a forest plot (`r round(length(papers_PI)/102*100, 2)`%). Most commonly, as expected, confidence or credible intervals were used - `r length(papers_CI)` papers (`r round(length(papers_CI)/102*100, 2)`%). Occasionally, also SD or SE was presented - `r length(papers_SDorSE)` papers (`r round(length(papers_SDorSE)/102*100, 2)`%).   
 
 Reference of that paper:    
 ```{r table of papers with PI, eval = TRUE}
@@ -238,11 +237,10 @@ dat2table <- papers_data %>% filter(fulltext_ID %in% papers_PI) %>% select(fullt
 # making a scrollable table
 kable(dat2table, "html") %>%
   kable_styling("striped", position = "left") %>%
-  scroll_box(width = "100%", height = "50px")
+  scroll_box(width = "100%", height = "100px")
 ```
 
 
-#### Figure 1
 ```{r visualise PI use, include = TRUE, eval = TRUE}
 myVaggr2 <- plotVenn(list(all_other = all, PI = papers_PI, CI=papers_CI, SE=papers_SDorSE), nCycles = 6000) #, outFile = "myVaggr.svg"
 myVaggr2 <- plotVenn(nVennObj = myVaggr2) #re-run simulation
@@ -250,11 +248,11 @@ myVaggr2 <- plotVenn(nVennObj = myVaggr2) #re-run simulation
 showSVG(nVennObj = myVaggr2, opacity = 0.1, labelRegions = F, fontScale = 3, setColors = c('white', 'black', 'darkcyan', 'aquamarine', 'red'), borderWidth = 3) # hiding region labels, big fonts, thick borders and custom colors
 ```
 
-*Legend description:*   
-PI = papers with PI used in forest(-like) plots   
-CI = papers with CI used in forest(-like) plots    
-SE = papers with SE or SE used in forest(-like) plots     
-all_other = all other papers with forest(-like) plots (N = `r length(all)`)    
+*Legend description (numbers of papers with at least one plot with given feature):*   
+PI = papers with PI used in forest(-like) plots (N = `r length(papers_PI)`)      
+CI = papers with CI used in forest(-like) plots (N = `r length(papers_CI)`)      
+SE = papers with SE or SE used in forest(-like) plots (N = `r length(papers_SDorSE)`)        
+all_other = all other papers with forest(-like) plots
 
 ### 3a.	What is most/least prevalent graphical style of forest plot used?
 
@@ -298,10 +296,8 @@ papers_box <- (union(papers_box_pure$box1, papers_box_mix$box2)) #6 papers with 
 ```
 
 **Answer 3a.**	
-Here we looked at the main graphical plot styles: dot/box/bar. As expected, “dot” was by far be most popular - `r length(papers_dot)` papers (`r round(length(papers_dot)/length(all)*100, 2)` %), as this is the “classical” forest plot style, where also we a shape is used to represent point estimate along  with CI. There were small numbers of papers with bar plots - `r length(papers_bar)` papers (`r round(length(papers_bar)/length(all)*100, 2)` %) and box plots - `r length(papers_box)` papers (`r round(length(papers_box)/length(all)*100, 2)` %). 
+Here we looked at the main graphical plot styles: dot/box/bar. As expected, “dot” was by far be most popular - `r length(papers_dot)` papers (`r round(length(papers_dot)/102*100, 2)`%), as this is the “classical” forest plot style, where also we a shape is used to represent point estimate along  with CI. There were small numbers of papers with bar plots - `r length(papers_bar)` papers (`r round(length(papers_bar)/102*100, 2)`%) and box plots - `r length(papers_box)` papers (`r round(length(papers_box)/102*100, 2)`%). 
 
-
-#### Figure 2
 ```{r visualise style use, eval = TRUE}
 myVaggr3a <- plotVenn(list(all_other = all, dot=papers_dot, bar=papers_bar, box=papers_box), nCycles = 6000) #, outFile = "myVaggr.svg"
 myVaggr3a <- plotVenn(nVennObj = myVaggr3a) #re-run simulation
@@ -309,11 +305,11 @@ myVaggr3a <- plotVenn(nVennObj = myVaggr3a) #re-run simulation
 showSVG(nVennObj = myVaggr3a, opacity = 0.1, labelRegions = F, fontScale = 3, setColors = c('white', 'darkred', 'gold', 'darkblue'), borderWidth = 3) # hiding region labels, big fonts, thick borders and custom colors
 ```
 
-*Legend description:*   
-dot = papers with dot-type style of forest(-like) plots    
-bar = papers with bar-type style of forest(-like) plots       
-box = papers with box-type style of forest(-like) plots   
-all_other = all other papers with forest(-like) plots (N = `r length(all)`)    
+*Legend description (numbers of papers with at least one plot with given feature):*   
+dot = papers with dot-type style of forest(-like) plots (N = `r length(papers_dot)`)       
+bar = papers with bar-type style of forest(-like) plots (N = `r length(papers_bar)`)          
+box = papers with box-type style of forest(-like) plots (N = `r length(papers_box)`)     
+all_other = all other papers with forest(-like) plots     
 
 
 ### 3b.	How often is size scaling of point estimates used in forest plots?
@@ -336,9 +332,8 @@ papers_scaling <- (union(papers_scaling_pure$scaling1, papers_scaling_mix$scalin
 ```
 
 **Answer 3b.** 
-Here we looked at whether dot shapes are scaled to represent their properties (sample sizes, precision, etc.) Only `r length(papers_scaling)` papers (`r round(length(papers_scaling)/length(all)*100, 2)` % of all plots; `r round(length(papers_scaling)/length(papers_dot)*100, 2)` % of dot-style plots), used point estimate scaling in the forest plots.   
+Here we looked at whether dot shapes are scaled to represent their properties (sample sizes, precision, etc.) Only `r length(papers_scaling)` papers (`r round(length(papers_scaling)/102*100, 2)` % of all plots; `r round(length(papers_scaling)/length(papers_dot)*100, 2)` % of dot-style plots), used point estimate scaling in the forest plots.   
 
-#### Figure 3  
 ```{r visualise dot scaling use, eval = TRUE}
 myVaggr3b <- plotVenn(list(all_other = all, scaling=papers_scaling), nCycles = 6000) #, outFile = "myVaggr.svg"
 myVaggr3b <- plotVenn(nVennObj = myVaggr3b) #re-run simulation
@@ -346,9 +341,9 @@ myVaggr3b <- plotVenn(nVennObj = myVaggr3b) #re-run simulation
 showSVG(nVennObj = myVaggr3b, opacity = 0.1, labelRegions = F, fontScale = 3, setColors = c('white', 'teal'), borderWidth = 3) # hiding region labels, big fonts, thick borders and custom colors
 ```
 
-*Legend description:*   
+*Legend description (numbers of papers with at least one plot with given feature):*   
 scaling = papers with dot-type plot style and scaled size of the dot (point estimate) in the forest(-like) plots  
-all_other = all papers with forest(-like) plots (N = `r length(all)`)    
+all_other = all papers with forest(-like) plots (N = `r 102`)    
 
 
 
@@ -405,10 +400,8 @@ papers_other <- (union(papers_other_pure$other1, papers_other_mix$other2)) #77 p
 ```
 
 **Answer 4.**    
-As expected, not many studies contained plots that looked like potential “classical” forest plots (aggregated at study level) - `r length(papers_study)` papers (`r round(length(papers_study)/length(all)*100, 2)` %) {note, this number will be re-evaluated below]. There were more studies with taxon-level data aggregation forest plots - `r length(papers_taxon)` papers (`r round(length(papers_taxon)/length(all)*100, 2)` %). And, also as expected, "other aggregated" forest plots dominated - `r length(papers_other)` papers (`r round(length(papers_other)/length(all)*100, 2)` %). There were very few that showed individual effect sizes in forest plots - `r length(papers_individual)` papers (`r round(length(papers_individual)/length(all)*100, 2)` %).   
+As expected, not many studies contained plots that looked like potential “classical” forest plots (aggregated at study level) - `r length(papers_study)` papers (`r round(length(papers_study)/102*100, 2)`%) {note, this number will be re-evaluated below]. There were more studies with taxon-level data aggregation forest plots - `r length(papers_taxon)` papers (`r round(length(papers_taxon)/102*100, 2)`%). And, also as expected, "other aggregated" forest plots dominated - `r length(papers_other)` papers (`r round(length(papers_other)/102*100, 2)`%). There were very few that showed individual effect sizes in forest plots - `r length(papers_individual)` papers (`r round(length(papers_individual)/102*100, 2)`%).   
 
-
-#### Figure 4   
 
 ```{r visualise aggregation levels, eval = TRUE}
 # myVaggr4 <- plotVenn(list(all_papers=all, taxon_aggr = papers_taxon, study_aggr=papers_study, individual_aggr=papers_individual), nCycles = 6000) #, outFile = "myVaggr.svg"
@@ -424,12 +417,12 @@ myVaggr4 <- plotVenn(nVennObj = myVaggr4) #re-run simulation
 showSVG(nVennObj = myVaggr4, opacity = 0.1, labelRegions = F, fontScale = 3, setColors = c('white', 'teal', 'orange', 'green', 'black'), borderWidth = 3) # hiding region labels, big fonts, thick borders and custom colors
 ```
 
-*Legend description:*   
+*Legend description (numbers of papers with at least one plot with given feature):*   
 tax = papers with effect sizest aggregated to taxon level in the forest(-like) plots (N = `r length(papers_taxon)`)        
 stu = papers with effect sizes aggregated to study level in the forest(-like) plots  (N = `r length(papers_study)`)         
 ind = papers with individual effect sizes presented in the forest(-like) plots (N = `r length(papers_individual)`)        
 forest = potential papers with "classical/real" forest-plots (to be manually re-evaluated) (N = `r length(potential_forest)`)              
-all_other = all other papers with forest(-like) plots (N = `r length(all)`)      
+all_other = all other papers with forest(-like) plots      
 
 Table of papers with potential classical forest plots (to be re-evaluated - see below):    
 ```{r table of papers with potential classical forest plots, eval = TRUE}
@@ -439,7 +432,7 @@ dat4table <- papers_data %>% filter(fulltext_ID %in% potential_forest) %>% selec
 # making a scrollable table
 kable(dat4table, "html") %>%
   kable_styling("striped", position = "left") %>%
-  scroll_box(width = "100%", height = "50px")
+  scroll_box(width = "100%", height = "500px")
 ```
 
 
@@ -471,35 +464,35 @@ dat5table <- papers_data %>% filter(fulltext_ID %in% real_forest) %>% select(ful
 # making a scrollable table of references 
 kable(dat5table, "html") %>%
   kable_styling("striped", position = "left") %>%
-  scroll_box(width = "100%", height = "50px")
+  scroll_box(width = "100%", height = "500px")
 ```
 
-The remaining 4 assessed papers were excluded due to not showing the overall mean effect size in the same plot panel.      
-#### Figure 5   
+The remaining 4 assessed papers were excluded due to not showing the overall mean effect size in the same plot panel.          
 
 ```{r revisualise aggregation levels with real forest plots, eval = TRUE}
 #with hand-picked "real forest" paper added (in balck):
 myVaggr5 <- plotVenn(list(all_other = all, tax = papers_taxon, stu = papers_study, ind = papers_individual, forest = real_forest), nCycles = 6000) #, outFile = "myVaggr.svg"
 myVaggr5 <- plotVenn(nVennObj = myVaggr5) #re-run simulation
-showSVG(nVennObj = myVaggr4, opacity = 0.1, labelRegions = F, fontScale = 3, setColors = c('white', 'teal', 'orange', 'green', 'black'), borderWidth = 3) # hiding region labels, big fonts, thick borders and custom colors
+showSVG(nVennObj = myVaggr5, opacity = 0.1, labelRegions = F, fontScale = 3, setColors = c('white', 'teal', 'orange', 'green', 'black'), borderWidth = 3) # hiding region labels, big fonts, thick borders and custom colors
 ```
-*Legend description:*   
+
+*Legend description (numbers of papers with at least one plot with given feature):*   
 tax = papers with effect sizest aggregated to taxon level in the forest(-like) plots (N = `r length(papers_taxon)`)       
 stu = papers with effect sizes aggregated to study level in the forest(-like) plots (N = `r length(papers_study)`)         
 ind = papers with individual effect sizes presented in the forest(-like) plots (N = `r length(papers_individual)`)     
 forest = actual papers with "classical/real" forest-plots (manually re-evaluated) (N = `r length(real_forest)`)      
-all_other = all other papers with forest(-like) plots (N = `r length(all)`)     
+all_other = all other papers with forest(-like) plots         
   
-## Additional refinements of STAGE1 literature survey  
+## Literature survey STAGE1 - extra   
 
 ### 6. What is the frequency of forest-like plots with species as aggregation levels?    
 
 To answer this question we manually re-evaluated the subset of `r length(papers_taxon)` papers which used some sort of taxonomic grouping for aggregating effect sizes. We then created a list of papers conatining at least one plot with specis-level aggregation of effect sizes.     
 
-IDs of papers re-evaluated papers: `r sort(papers_taxon)`     
+IDs of re-evaluated papers: `r sort(papers_taxon)`     
 
-**Answer 6.** 
-Final list of IDs papers presenting "species" forest-like plots (with relevant figure file ID):     
+**Answer 6.**    
+Final list of IDs of 7 papers presenting "species" forest-like plots:     
 ```{r table included papers with species forest-like plot, eval = TRUE} 
  # 1. ft024 (ft024_fig1.png, ft024_fig5.png)   
  # 2. ft028 (ft140_figS1.png)    
@@ -514,7 +507,9 @@ papers_species <- c("ft024", "ft028", "ft060", "ft068", "ft117", "ft140", "ft187
 dat6 <- dat %>% filter(paperID %in% papers_species) %>% select(paperID, fileID, scaling) %>% group_by(paperID) %>% summarise(figures = paste(fileID, collapse=", ", scaling))
 
 # making a scrollable table
-kable(dat6, "html") %>%
+dat6table <- papers_data %>% filter(fulltext_ID %in% papers_species) %>% select(fulltext_ID, authors, pub_year, title, journal, volume, pages)
+
+kable(dat6table, "html") %>%
   kable_styling("striped", position = "left") %>%
   scroll_box(width = "100%", height = "300px")
 ```
@@ -529,10 +524,10 @@ myVaggr6 <- plotVenn(nVennObj = myVaggr6) #re-run simulation
 showSVG(nVennObj = myVaggr6, opacity = 0.1, labelRegions = F, fontScale = 3, setColors = c('white', 'forestgreen', 'deepskyblue'), borderWidth = 3) # hiding region labels, big fonts, thick borders and custom colors
 ```
 
-*Legend description:*   
+*Legend description (numbers of papers with at least one plot with given feature):*   
 species = papers with effect sizest aggregated to species level in the forest(-like) plots (N = `r length(papers_species)`)       
 classical = actual papers with "classical/real" forest-plots (manually re-evaluated) (N = `r length(real_forest)`)    
-all_other = all other papers with forest(-like) plots (N = `r length(all)`)     
+all_other = all other papers with forest(-like) plots    
 
 
 ### 7. What is the frequency of forest-like plots with individual effect sizes overlaid as dots over aggregated effect estimates? Are these individual dots scaled to the effect size (e.g., using sample size, precision)?       
@@ -541,14 +536,15 @@ To answer this question, we manually re-evaluated the subset of `r length(papers
 
 IDs of papers re-evaluated papers: `r sort(papers_individual)`    
 
-**Answer 7.**  [MAKE TABLE WITH REFS!]
-Final list of papers presenting "overlaid" forest-like plots (with relevant figure file ID):     
- 1. ft039 (ft096_fig3.png (odd, with box plots)) - individual effect size dots not scaled    
- 1. ft096 (ft096_fig1.png, ft096_fig2.png, ft096_figS2.png, ft096_figS3.png, ft096_figS4.png, ft096_figS5.png) - individual effect size dots scaled    
- 2. ft181 (ft181_fig2.png, ft181_fig3.png, ft181_fig4.png) - individual effect size dots not scaled      
-
-References of these papers:    
+**Answer 7.**  
+Final list of references of papers presenting "overlaid" forest-like plots:     
 ```{r table of papers with overlaid ES, eval = TRUE}
+ 
+# 1. ft039 (ft096_fig3.png (odd, with box plots)) - individual effect size dots not scaled    
+# 2. ft096 (ft096_fig1.png, ft096_fig2.png, ft096_figS2.png, ft096_figS3.png, ft096_figS4.png, ft096_figS5.png) - individual effect size dots scaled    
+# 3. ft181 (ft181_fig2.png, ft181_fig3.png, ft181_fig4.png) - individual effect size dots not scaled      
+  
+  
 papers_overlaid <- c("ft039", "ft096", "ft181")
   
 # making a scrollable table
@@ -557,7 +553,7 @@ dat7table <- papers_data %>% filter(fulltext_ID %in% papers_overlaid) %>% select
 # making a scrollable table
 kable(dat7table, "html") %>%
   kable_styling("striped", position = "left") %>%
-  scroll_box(width = "100%", height = "50px")
+  scroll_box(width = "100%", height = "500px")
 ```
  
 The remaining assessed papers were excluded due to all relevant figures not overlaying individual effect size dots onto aggregated effect sizes.    
@@ -576,7 +572,7 @@ During STAGE2, two researchers (ML, YY) assessed the extracted figures that were
 
    
 ```{r create list of plots to be assessed in STAGE2, eval = FALSE} 
-#length(all) #all 84 paper IDs
+#length(all) #all 83 paper IDs
 #length(dat$fileID) #all file IDs = 296
 classical_IDs <- c("ft065_fig1", "ft065_fig2.png", "ft065_fig3.png", "ft078_figS1", "ft082_figS4", "ft098_fig2", "ft112_fig2", "112_fig3", "112_figS3","112_figS4", "112_figS5", "ft131_fig1",  "ft148_figS2", "148_figS4", "148_figS7", "148_figS10", "148_figS18", "148_figS19", "ft151_fig1", "ft167_fig2", "167_figSB", "ft173_fig2", "ft175_figS4", "175_figS5", "175_figS6", "175_figS7", "ft177_fig2")  
  
@@ -598,27 +594,22 @@ kable(dat7, "html") %>%
 
 ## Literature survey STAGE2 - results    
 
-In stage2 we re-assessed and code `r length(unique(S2_data$paperID))` papers. 
-
 
 ```{r load coded data STAGE2, eval = TRUE}
 # getting the data and formating some variables (turning chraracter vectors to factors)
-S2_data <- read_excel("./data/Data collection for the _orchard plot_ manuscript - STAGE2 (Responses)_cleaned.xlsx", na = "NA") %>% 
-   mutate_if(is.character, as.factor)
+S2_data <- read_excel("../data/Data collection for the _orchard plot_ manuscript - STAGE2 (Responses)_cleaned.xlsx", na = "NA") %>%  mutate_if(is.character, as.factor)
 #str(S2_data) #each row represents one scoring attempt, so it is usually 2 rows per figure file (since 2 people were assessing independently)
-
 
 #remove all rows with censor==1, so that only one final score is left for each figure file
 S2_data <- S2_data  %>% filter(censor == 0)
 S2_data <- droplevels(S2_data) #adjust factor levels
-
 ```
 
 ```{r clean coded data STAGE2, include = FALSE, eval = TRUE}
-
-
 #remove unnecessary columns and rename the other
 S2_data <- S2_data  %>% select(-ends_with("same"), -censor, -Timestamp, -"Assessor's name", -"Is this an aggregarted forest-like plot")
+
+#rename columns with shorter names
 S2_data <- S2_data  %>% rename(fileID = "Forest plot file name", 
                        N_panels = "How many similar panels with aggregated forest-like plots are being coded?",
                        panel_comm = "If more than 1 panel in the figure, list which similar panels are being coded together:",
@@ -648,7 +639,10 @@ all <- unique(S2_data$paperID) #IDs of all papers
 #re-arrange columns
 S2_data <- S2_data %>%
   select(paperID, everything())
+```
 
+Table of papers and specific figures re-assessed and coded in STAGE2 (N = `r length(unique(S2_data$paperID))` papers):    
+```{r table of STAGE2 assessed papers, eval = TRUE}
 # making a scrollable table
 kable(S2_data, "html") %>%
   kable_styling("striped", position = "left") %>%
@@ -683,32 +677,32 @@ papers_without_overall_mean <- S2_data1 %>%
   group_by(paperID) %>%
   summarise(overall_mean = unique(paperID))
 #dim(papers_without_overall_mean) #64 (out of 77) papers
-#(dim(papers_with_overall_mean)[1] + dim(papers_without_overall_mean)[1] - length(unique(S2_data1$paperID)))/2 # 9 papers with both plots with and without overall mean
+#(nrow(papers_with_overall_mean) + nrow(papers_without_overall_mean) - length(unique(S2_data1$paperID)))/2 # 9 papers with both plots with and without overall mean
 ```
 
 **Answer 8.**	   
-Overall mean is not commonly presented alongsiet aggregated point estimates in forest-like plots - only `r sum_overall_mean[2,2]` (`r round(sum_overall_mean[2,3], 2)` %) out of `r sum(sum_overall_mean$sum)` aggeregated forest-like plots assessed.
+Overall mean is not commonly presented along  aggregated point estimates in forest-like plots - only in `r sum_overall_mean[2,2]` (`r round(sum_overall_mean[2,3], 2)`%) out of `r sum(sum_overall_mean$sum)` aggeregated forest-like plots assessed. These plots were from `r nrow(papers_with_overall_mean)` papers (`r round(nrow(papers_with_overall_mean)/102*100, 2)`% of all papers).  
 
-References of papers with aggregated forest-like plots with overall mean:    
+Table of references of papers with aggregated forest-like plots with overall mean:     
 ```{r table of papers with overall mean, eval = TRUE}
 # making a scrollable table
-dat8table <- papers_data %>% filter(fulltext_ID %in% papers_with_overall_mean) %>% select(fulltext_ID, authors, pub_year, title, journal, volume, pages)
+dat8table <- papers_data %>% filter(fulltext_ID %in% papers_with_overall_mean$paperID) %>% select(fulltext_ID, authors, pub_year, title, journal, volume, pages)
 
 # making a scrollable table
 kable(dat8table, "html") %>%
   kable_styling("striped", position = "left") %>%
-  scroll_box(width = "100%", height = "50px")
+  scroll_box(width = "100%", height = "500px")
 ```
 
-References of papers with aggregated forest-like plots without overall mean:    
+Table of references of papers with aggregated forest-like plots without overall mean:    
 ```{r table of papers without overall mean, eval = TRUE}
 # making a scrollable table
-dat8table <- papers_data %>% filter(fulltext_ID %in% papers_without_overall_mean) %>% select(fulltext_ID, authors, pub_year, title, journal, volume, pages)
+dat8table <- papers_data %>% filter(fulltext_ID %in% papers_without_overall_mean$paperID) %>% select(fulltext_ID, authors, pub_year, title, journal, volume, pages)
 
 # making a scrollable table
 kable(dat8table, "html") %>%
   kable_styling("striped", position = "left") %>%
-  scroll_box(width = "100%", height = "50px")
+  scroll_box(width = "100%", height = "500px")
 ```
 
 
@@ -739,30 +733,19 @@ papers_with_metaanalysis <- S2_data2 %>%
   group_by(paperID) %>%
   summarise(overall_mean = unique(paperID)) 
 #dim(papers_with_metaanalysis) #14 (out of 77) papers
-#(dim(papers_with_metaregression)[1] + dim(papers_with_metaanalysis)[1] - length(unique(S2_data2$paperID)))/2 # 9 papers with both plots with meta-analysis and meta-regression
+#(nrow(papers_with_metaregression) + nrow(papers_with_metaanalysis) - length(unique(S2_data2$paperID)))/2 # 9 papers with both plots with meta-analysis and meta-regression
 ```
 
 **Answer 9.**	   
-Most commonly, forest-like plots in ecology and evolution are based on meta-regression models -  `r sum_aggr_estimate_by[2,2]` (`r round(sum_aggr_estimate_by[2,3], 2)` %) out of `r sum(sum_aggr_estimate_by$sum)` aggeregated forest-like plots assessed.    
+Most commonly, forest-like plots in ecology and evolution are based on meta-regression models -  `r sum_aggr_estimate_by[2,2]` (`r round(sum_aggr_estimate_by[2,3], 2)`%) out of `r sum(sum_aggr_estimate_by$sum)` aggeregated forest-like plots assessed. These plots were from `r nrow(papers_with_metaregression)` papers (`r round(nrow(papers_with_metaregression)/102*100, 2)`% of all papers).    
 
-References of papers with aggregated forest-like plots based on meta-regression models:    
+Table of references of papers with aggregated forest-like plots based on meta-regression models:    
 ```{r table of papers with meta-regression, eval = TRUE}
 # making a scrollable table
-dat9table <- papers_data %>% filter(fulltext_ID %in% papers_with_metaregression) %>% select(fulltext_ID, authors, pub_year, title, journal, volume, pages)
+dat9table <- papers_data %>% filter(fulltext_ID %in% papers_with_metaregression$paperID) %>% select(fulltext_ID, authors, pub_year, title, journal, volume, pages)
 
 # making a scrollable table
 kable(dat9table, "html") %>%
   kable_styling("striped", position = "left") %>%
-  scroll_box(width = "100%", height = "50px")
-```
-
-References of papers with aggregated forest-like plots based on meta-regression models:    
-```{r table of papers with meta-analysis, eval = TRUE}
-# making a scrollable table
-dat9table <- papers_data %>% filter(fulltext_ID %in% papers_with_metaanalysis) %>% select(fulltext_ID, authors, pub_year, title, journal, volume, pages)
-
-# making a scrollable table
-kable(dat9table, "html") %>%
-  kable_styling("striped", position = "left") %>%
-  scroll_box(width = "100%", height = "50px")
+  scroll_box(width = "100%", height = "500px")
 ```
