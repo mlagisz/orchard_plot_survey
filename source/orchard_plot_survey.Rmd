@@ -607,7 +607,7 @@ S2_data <- droplevels(S2_data) #adjust factor levels
 
 ```{r clean coded data STAGE2, include = FALSE, eval = TRUE}
 #remove unnecessary columns and rename the other
-S2_data <- S2_data  %>% select(-ends_with("same"), -censor, -Timestamp, -"Assessor's name", -"Is this an aggregated forest-like plot")
+S2_data <- S2_data  %>% select(-ends_with("same"), -censor, -Timestamp, -"Assessor's name", -"Is this an aggregarted forest-like plot")
 
 #rename columns with shorter names
 S2_data <- S2_data  %>% rename(fileID = "Forest plot file name", 
