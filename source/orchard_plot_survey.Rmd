@@ -411,7 +411,7 @@ papers_other <- (union(papers_other_pure$other1, papers_other_mix$other2)) #77 p
 ```
 
 **Answer 4.**    
-As expected, not many studies contained plots that looked like potential “classical” forest plots (aggregated at study level) - `r length(papers_study)` papers (`r round(length(papers_study)/102*100, 2)`%). Notably, this number does not represent the occurance of "classical" forest plots, as they need to fulfill also other criteria, and this will be evaluated in one of the subsequent questions. There were more studies with taxon-level data aggregation forest plots - `r length(papers_taxon)` papers (`r round(length(papers_taxon)/102*100, 2)`%). And, also as expected, "other aggregated" forest plots dominated - `r length(papers_other)` papers (`r round(length(papers_other)/102*100, 2)`%). There were very few that showed individual effect sizes in forest plots - `r length(papers_individual)` papers (`r round(length(papers_individual)/102*100, 2)`%).   
+As expected, not many studies contained plots that looked like potential “classical” forest plots (aggregated at study level) - `r length(papers_study)` papers (`r round(length(papers_study)/102*100, 2)`%). Notably, this number does not represent the occurrence of "classical" forest plots, as they need to fulfill also other criteria, and this will be evaluated in one of the subsequent questions. There were more studies with taxon-level data aggregation forest plots - `r length(papers_taxon)` papers (`r round(length(papers_taxon)/102*100, 2)`%). And, also as expected, "other aggregated" forest plots dominated - `r length(papers_other)` papers (`r round(length(papers_other)/102*100, 2)`%). There were very few that showed individual effect sizes in forest plots - `r length(papers_individual)` papers (`r round(length(papers_individual)/102*100, 2)`%).   
 
 
 ```{r visualise aggregation levels, eval = TRUE}
@@ -436,7 +436,7 @@ ind = papers with individual effect sizes presented in the forest(-like) plots (
 forest = potential papers with "classical/real" forest-plots (to be manually re-evaluated) (N = `r length(potential_forest)`)              
 all_other = all other papers with forest(-like) plots      
 
-Table of papers with potential classical forest plots (to be re-evaluated to se if they are actually can be considered "classical" forest plots):     
+Table of papers with potential classical forest plots (to be re-evaluated to see if they are actually can be considered "classical" forest plots):     
 ```{r table of papers with potential classical forest plots, eval = TRUE}
 # making a scrollable table
 dat4table <- papers_data %>% filter(fulltext_ID %in% potential_forest) %>% select(fulltext_ID, authors, pub_year, title, journal, volume, pages)
@@ -488,7 +488,7 @@ myVaggr5 <- plotVenn(nVennObj = myVaggr5) #re-run simulation
 showSVG(nVennObj = myVaggr5, opacity = 0.1, labelRegions = F, fontScale = 3, setColors = c('white', 'teal', 'orange', 'green', 'black'), borderWidth = 3) # hiding region labels, big fonts, thick borders and custom colors
 ```
 
-*Figure 6. aggregation levels in surveyed papers realtively to apapers with classical forest plots.*     
+*Figure 6. aggregation levels in surveyed papers relatively to papers with classical forest plots.*     
 *Legend description (numbers of papers with at least one plot with given feature):*   
 tax = papers with effect sizes aggregated to taxon level in the forest(-like) plots (N = `r length(papers_taxon)`)       
 stu = papers with effect sizes aggregated to study level in the forest(-like) plots (N = `r length(papers_study)`)         
@@ -535,7 +535,7 @@ myVaggr6 <- plotVenn(nVennObj = myVaggr6) #re-run simulation
 showSVG(nVennObj = myVaggr6, opacity = 0.1, labelRegions = F, fontScale = 3, setColors = c('white', 'forestgreen', 'deepskyblue'), borderWidth = 3) # hiding region labels, big fonts, thick borders and custom colors
 ```
 
-*Figure 7. Species-level aggregartion in surveyed papers.*    
+*Figure 7. Species-level aggregation in surveyed papers.*    
 *Legend description (numbers of papers with at least one plot with given feature):*   
 species = papers with effect sizes aggregated to species level in the forest(-like) plots (N = `r length(papers_species)`)       
 classical = actual papers with "classical/real" forest-plots (manually re-evaluated) (N = `r length(real_forest)`)    
@@ -762,15 +762,15 @@ kable(dat9table, "html") %>%
 
 
 
-### 10. What is the frequency of cattepillar-like plots with individual effect sizes plotted with CI?         
+### 10. What is the frequency of caterpillar plots with individual effect sizes plotted with CI?         
 
-To answer this question, we re-evaluated a definition of cattepillar plot as:   
-a) a classical forest plot (non-aggregated dot-type with CI) without overall mean (Kossmeier et al. 2020. Charting the landscape of graphical displays for meta-analysis and systematic reviews: a comprehensive review, taxonomy, and feature analysis BMC Med Res Methodol. 2020; 20: 26).    
-b) individual ES are ordered by ES size, they have CI and they can heave or not have labels (Spiegelhalter D.J. 2005. Funnel plots for comparing institutional performance. Statistics in Medicine,24(8), 1185-1202).    
-For these two definitions we created a list of papers containing at least one plot matching the given definition of a catepillar plot.
-  
-**Answer 10.**    
-Papers presenting catepillar-like plots: 
-a) There were 4 papers that were initially classified as potetially classcial forest plots but later excluded due to not showing the overall mean effect size in the same plot panel: ft037, ft084, ft109, ft181.
-b) Re-evaluate papers: `r sort(papers_individual)`     
+To answer this question, we considered a definition of a caterpillar plot as:     
+ **a)** a classical forest plot (non-aggregated dot-type with CI) without overall mean (Kossmeier et al. 2020. Charting the landscape of graphical displays for meta-analysis and systematic reviews: a comprehensive review, taxonomy, and feature analysis BMC Med Res Methodol. 2020; 20: 26).    
+ **b)** individual ES are ordered by ES magnitude, with CI (Spiegelhalter D.J. 2005. Funnel plots for comparing institutional performance. Statistics in Medicine,24(8), 1185-1202); they can have or not have labels or overall means displayed.       
+For these two definitions we created a list of papers containing at least one plot matching the given definition (a or b) of a caterpillar plot.    
+     
+**Answer 10.**     
+Papers presenting caterpillar-like plots:     
+ **a)** 5 papers with classical-like forest plots but not showing the overall mean effect size in the same plot panel: ft037 (Fig. S4-3), ft084 (FigS1-S2), ft109(FigS9, FigS12-S14), ft148 (Fig10), ft181 (Fig2)     
+ **b)** 4 papers with forest plots (effect sizes with CI) ordered by ES magnitude: ft098 (Fig2), ft167 (Fig2, AppendixB), ft177 (Fig2), ft181 (Fig2)     
 
