@@ -64,7 +64,7 @@ pacman::p_load(tidyverse, # tidy family and related pacakges below
  
 ## Literature search - methods   
 
-The aim of the literature survey was to examine how forest plots are used in ecology and evolution, and what features they have. To achieve this, we conducted a literature survey on graphical presentation of meta-analytic data and results in ecology and evolution. We collected examples of “forest plots” from 102 published meta-analyses that were collected for our another upcoming publication; see Extended Data Table 1).   
+The aim of the literature survey was to examine how forest plots are used in ecology and evolution, and what features they have. We conducted a systematic search of ecology and evolution journals. In brief, we collected the ISSN of journals classified under ‘Ecology’ and/or ‘Evolutionary Biology’, according to the ISI InCites Journal Citation Reports. We then searched within these journals for papers published between 1 January 2010 and 11 March 2019, and which contained any of the following search terms in the title, abstract, or keywords: “meta-analy* “, “metaanaly* “, or “meta-regression”. To reduce the large pool of papers to a representative sample, we filtered the results to only include the subset of journals which often published meta-analyses: the top 10 most represented ecology journals; the top 10 most represented evolution journals, and; the top 11 most represented journals that were classified as both ecology and evolutionary biology. We then took a random sample of papers from each journal to give 297 papers for screening. During screening we identified 102 papers that unambiguously addressed a question in the fields of ecology or evolutionary biology, performed a search for and collected data from primary literature, extracted or calculated the same type of effect size from multiple studies, and analysed those effect sizes in a statistical model. These criteria identify a representative sample of 102 ‘traditional’ published meta-analyses (Extended Data Table 1).   
 
 **Extended Data Table 1:**   
 List of 102 representative meta-analytic papers published in ecology and/or evolution journals.      
@@ -773,4 +773,5 @@ For these two definitions we created a list of papers containing at least one pl
 Papers presenting caterpillar-like plots:     
  **a)** 5 papers with classical-like forest plots but not showing the overall mean effect size in the same plot panel: ft037 (Fig. S4-3), ft084 (FigS1-S2), ft109(FigS9, FigS12-S14), ft148 (Fig10), ft181 (Fig2)     
  **b)** 4 papers with forest plots (effect sizes with CI) ordered by ES magnitude: ft098 (Fig2), ft167 (Fig2, AppendixB), ft177 (Fig2), ft181 (Fig2)     
+
 
